@@ -141,37 +141,6 @@ export default class MathTypePlugin extends Plugin {
 
         editor.editing.view.addObserver( ClickObserver );
 
-        editor.editing.view.document.on( 'keydown', jumpOverMath );
-
-        // Move cursor from the end of the inline filler to the beginning of it when, so the filler does not break navigation.
-        function jumpOverMath( evt, data ) {
-            if ( data.keyCode == keyCodes.arrowleft ) {
-                const domSelection = data.domTarget.ownerDocument.defaultView.getSelection();
-
-                if ( domSelection.rangeCount == 1 && domSelection.getRangeAt( 0 ).collapsed ) {
-                    const domParent = domSelection.getRangeAt( 0 ).startContainer;
-
-                    if ( domParent.nodeName == 'img' && domParent.classList.contains( 'Wirisformula' ) ) {
-                        domSelection.collapse( domParent.parentNode, Array.from( domParent.parentNode.children ).indexOf( domParent ) );
-                    }
-
-                }
-
-            } else if ( data.keyCode == keyCodes.arrowright ) {
-                const domSelection = data.domTarget.ownerDocument.defaultView.getSelection();
-
-                if ( domSelection.rangeCount == 1 && domSelection.getRangeAt( 0 ).collapsed ) {
-                    const domParent = domSelection.getRangeAt( 0 ).startContainer;
-
-                    if ( domParent.nodeName == 'img' && domParent.classList.contains( 'Wirisformula' ) ) {
-                        domSelection.collapse( domParent.parentNode, Array.from( domParent.parentNode.children ).indexOf( domParent ) + 1 );
-                    }
-
-                }
-
-            }
-        }
-
         // Override MathML plugin's data processor to custom data processor
         editor.data.processor = new CustomMathmlDataProcessor();
 
